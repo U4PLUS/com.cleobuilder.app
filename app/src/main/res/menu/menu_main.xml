@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_run"
+        android:icon="@drawable/run"
+        android:title="\u7f16\u8bd1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/text_undo"
+        android:icon="@drawable/undo"
+        android:title="\u64a4\u9500"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/text_redo"
+        android:icon="@drawable/redo"
+        android:title="\u91cd\u505a"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_open"
+        android:title="\u6253\u5f00..."
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save"
+        android:title="\u4fdd\u5b58\u6e90\u7801"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_new"
+        android:title="\u65b0\u5efa\u811a\u672c..."
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_mode"
+        android:title="\u6e38\u620f\u6a21\u5f0f">
+        <menu />
+    </item>
+
+    <item
+        android:id="@+id/action_wrap"
+        android:title="\u81ea\u52a8\u6362\u884c"
+        android:checkable="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_output"
+        android:title="\u8f93\u51fa\u65e5\u5fd7"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_about"
+        android:title="\u5173\u4e8e"
+        app:showAsAction="never" />
+</menu>

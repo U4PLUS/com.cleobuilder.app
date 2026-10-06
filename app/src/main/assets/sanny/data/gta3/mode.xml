@@ -1,0 +1,18 @@
+<mode id="gta3" title="GTA III" game="gta3" type="default">
+    <data>data/gta3/</data>
+    <opcodes>data/gta3/SCM.ini</opcodes>
+    <enums>data/gta3/enums.txt</enums>
+    <classes>data/gta3/classes.db</classes>
+    <variables>data/gta3/CustomVariables.ini</variables>
+    <keywords>data/gta3/keywords.txt</keywords>
+    <missions>data/gta3/missions.txt</missions>
+    <constants>data/gta3/constants.txt</constants>
+    <templates type="default">data/gta3/templates.txt</templates>
+    <templates type="custom">data/gta3/templates.custom.txt</templates>
+    <text format="gta3">game/text/american.gxt</text>
+    <ide>game/data/default.ide</ide>
+    <ide base="game/">game/data/gta3.dat</ide>
+    <library>data/gta3_sbl/gta3.json</library>
+    <copy-directory type="scm">game/data</copy-directory>
+    <copy-directory type="cleo">game/CLEO</copy-directory>
+</mode>

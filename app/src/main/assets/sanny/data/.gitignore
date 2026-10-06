@@ -1,0 +1,9 @@
+!.gitignore
+*.dll
+*.gxt
+settings.ini
+sa.json
+gta3.json
+vc.json
+sa_mobile.json
+vc_mobile.json

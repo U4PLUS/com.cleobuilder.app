@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurfaceContainer">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/activity_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:title="Sanny Builder" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.sanny.builder.ui.CleoEditor
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="horizontal|vertical" />
+
+    <GridLayout
+        android:id="@+id/symbol_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="14"
+        android:background="?attr/colorSurfaceContainer"
+        android:padding="3dp" />
+
+</LinearLayout>

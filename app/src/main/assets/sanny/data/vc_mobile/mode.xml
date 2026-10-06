@@ -1,0 +1,24 @@
+<mode extends="vc" id="vc_mobile" title="GTA VC Mobile" game="vc_mobile" type="">
+    <data>data/vc_mobile/</data>
+    <!--
+    Edit-mode definition for CLEO Builder (Android).
+
+    Opcode data: GTA Modding Community Opcode Database
+    (https://gtagmodding.com/opcode-database/ , https://gtamods.com/wiki/List_of_opcodes)
+ -->
+
+    <opcodes>data/vc/VCSCM.ini</opcodes>
+    <opcodes>data/vc_mobile/VCSCM.Mobile.ini</opcodes>
+    <opcodes>data/vc_mobile/VCSCM.CLEO.ini</opcodes>
+    <opcodes>data/vc_mobile/VCSCM*.ini</opcodes>
+    <examples>data/vc_mobile/opcodes.txt</examples>
+    <variables>data/vc_mobile/CustomVariables.ini</variables>
+    <keywords>data/vc_mobile/keywords.txt</keywords>
+    <templates type="default">data/vc_mobile/templates.txt</templates>
+    <templates type="custom">data/vc_mobile/templates.custom.txt</templates>
+    <text format="vc">data/vc_mobile/american.gxt</text>
+    <ide>data/vc_mobile/data/default.ide</ide>
+    <ide base="data/vc_mobile/">data/vc_mobile/data/gta_vc.dat</ide>
+    <library>data/vc_mobile/vc_mobile.json</library>
+    <enums>data/vc_mobile/enums.txt</enums>
+</mode>

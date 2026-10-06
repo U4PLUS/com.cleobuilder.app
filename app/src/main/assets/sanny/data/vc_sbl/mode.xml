@@ -1,0 +1,31 @@
+<mode id="vc_sbl" title="GTA VC (SBL)" game="vc" type="default">
+    <data>data/vc_sbl/</data>
+    <!--
+    Edit-mode definition for CLEO Builder (Android).
+
+    Opcode data: GTA Modding Community Opcode Database
+    (https://gtagmodding.com/opcode-database/ , https://gtamods.com/wiki/List_of_opcodes)
+ -->
+
+    <library autoupdate="yes">data/vc_sbl/vc.json</library>
+    <classes autoupdate="yes">data/vc_sbl/classes.db</classes>
+    <enums autoupdate="yes">data/vc_sbl/enums.txt</enums>
+
+    <constants>data/vc_sbl/constants.txt</constants>
+    <ide>game/data/default.ide</ide>
+    <ide base="game/">game/data/gta_vc.dat</ide>
+    <keywords>data/vc_sbl/keywords.txt</keywords>
+
+    <!-- decompiling -->
+    <missions>data/vc_sbl/missions.txt</missions>
+    <variables>data/vc_sbl/CustomVariables.ini</variables>
+    <text format="vc">game/text/american.gxt</text>
+
+    <!-- ide -->
+    <templates type="default">data/vc_sbl/templates.txt</templates>
+    <templates type="custom">data/vc_sbl/templates.custom.txt</templates>
+
+    <!-- compiling -->
+    <copy-directory type="scm">game/data</copy-directory>
+    <copy-directory type="cleo">game/CLEO</copy-directory>
+</mode>

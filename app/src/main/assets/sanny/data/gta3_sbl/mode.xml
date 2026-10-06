@@ -1,0 +1,31 @@
+<mode id="gta3_sbl" title="GTA III (SBL)" game="gta3" type="default">
+    <data>data/gta3_sbl/</data>
+        <!--
+    Edit-mode definition for CLEO Builder (Android).
+
+    Opcode data: GTA Modding Community Opcode Database
+    (https://gtagmodding.com/opcode-database/ , https://gtamods.com/wiki/List_of_opcodes)
+ -->
+
+    <library autoupdate="yes">data/gta3_sbl/gta3.json</library>
+    <classes autoupdate="yes">data/gta3_sbl/classes.db</classes>
+    <enums autoupdate="yes">data/gta3_sbl/enums.txt</enums>
+
+    <constants>data/gta3_sbl/constants.txt</constants>
+    <ide>game/data/default.ide</ide>
+    <ide base="game/">game/data/gta3.dat</ide>
+    <keywords>data/gta3_sbl/keywords.txt</keywords>
+
+    <!-- decompiling -->
+    <missions>data/gta3_sbl/missions.txt</missions>
+    <variables>data/gta3_sbl/CustomVariables.ini</variables>
+    <text format="gta3">game/text/american.gxt</text>
+    
+    <!-- ide -->
+    <templates type="default">data/gta3_sbl/templates.txt</templates>
+    <templates type="custom">data/gta3_sbl/templates.custom.txt</templates>
+    
+    <!-- compiling -->
+    <copy-directory type="scm">game/data</copy-directory>
+    <copy-directory type="cleo">game/CLEO</copy-directory>
+</mode>

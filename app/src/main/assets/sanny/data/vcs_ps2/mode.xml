@@ -1,0 +1,15 @@
+<mode extends="vcs_psp" id="vcs_ps2" title="GTA VCS (PS2)" game="vcs">
+    <!--
+    Edit-mode definition for CLEO Builder (Android).
+
+    Opcode data: GTA Modding Community Opcode Database
+    (https://gtagmodding.com/opcode-database/ , https://gtamods.com/wiki/List_of_opcodes)
+ -->
+
+    <variables>data/vcs_ps2/CustomVariables.ini</variables>
+    <labels>data/vcs_ps2/CustomLabels.ini</labels>
+    <arrays>data/vcs_ps2/CustomArrays.ini</arrays>
+    <missions>data/vcs_ps2/missions.txt</missions>
+    <text format="vc">data/vcs_ps2/english.gxt</text>
+    <examples>data/vcs_ps2/opcodes.txt</examples>
+</mode>

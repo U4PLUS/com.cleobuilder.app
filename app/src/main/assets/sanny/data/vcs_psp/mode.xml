@@ -1,0 +1,25 @@
+<mode id="vcs_psp" title="GTA VCS (PSP)" game="vcs" type="default">
+    <!--
+    Edit-mode definition for CLEO Builder (Android).
+
+    Opcode data: GTA Modding Community Opcode Database
+    (https://gtagmodding.com/opcode-database/ , https://gtamods.com/wiki/List_of_opcodes)
+ -->
+
+    <data>data/vcs_psp/</data>
+    <opcodes>data/vcs_psp/VCSSCM.ini</opcodes>
+    <classes>data/vcs_psp/classes.db</classes>
+    <constants>data/vcs_psp/constants.txt</constants>
+    <templates type="default">data/vcs_psp/templates.txt</templates>
+    <templates type="custom">data/vcs_psp/templates.custom.txt</templates>
+    <ide>data/vcs_psp/default.ide</ide>
+    <keywords>data/vcs_psp/keywords.txt</keywords>
+    <library>data/vcs_psp/vcs.json</library>
+    <!-- PSP only-->
+    <variables>data/vcs_psp/CustomVariables.ini</variables>
+    <labels>data/vcs_psp/CustomLabels.ini</labels>
+    <arrays>data/vcs_psp/CustomArrays.ini</arrays>
+    <text format="vc">data/vcs_psp/english.gxt</text>
+    <missions>data/vcs_psp/missions.txt</missions>
+    <examples>data/vcs_psp/opcodes.txt</examples>
+</mode>
