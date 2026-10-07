@@ -853,7 +853,899 @@ wait 0
 
 ---
 
-## 10. 参考数据文件（编译器同源，可自行查全）
+
+---
+
+## 10. 游戏数据速查（GTASA 官方 IDE 数据，ID 供脚本直接使用）
+
+> 车辆/人物/物体数据提取自项目内置游戏 IDE 文件（ID↔名称事实数据）。模型 ID 是脚本里 `0247: load_model 411` 这类写法的数字。
+
+### 10.1 车辆模型 ID（212 辆，ID 400-611）
+
+| ID | 名称 | 类型 |
+|---|---|---|
+| 400 | LANDSTAL | car |
+| 401 | BRAVURA | car |
+| 402 | BUFFALO | car |
+| 403 | LINERUN | car |
+| 404 | PEREN | car |
+| 405 | SENTINEL | car |
+| 406 | DUMPER | mtruck |
+| 407 | FIRETRUK | car |
+| 408 | TRASH | car |
+| 409 | STRETCH | car |
+| 410 | MANANA | car |
+| 411 | INFERNUS | car |
+| 412 | VOODOO | car |
+| 413 | PONY | car |
+| 414 | MULE | car |
+| 415 | CHEETAH | car |
+| 416 | AMBULAN | car |
+| 417 | LEVIATHN | heli |
+| 418 | MOONBEAM | car |
+| 419 | ESPERANT | car |
+| 420 | TAXI | car |
+| 421 | WASHING | car |
+| 422 | BOBCAT | car |
+| 423 | MRWHOOP | car |
+| 424 | BFINJECT | car |
+| 425 | HUNTER | heli |
+| 426 | PREMIER | car |
+| 427 | ENFORCER | car |
+| 428 | SECURICA | car |
+| 429 | BANSHEE | car |
+| 430 | PREDATOR | boat |
+| 431 | BUS | car |
+| 432 | RHINO | car |
+| 433 | BARRACKS | car |
+| 434 | HOTKNIFE | car |
+| 435 | ARTICT1 | trailer |
+| 436 | PREVION | car |
+| 437 | COACH | car |
+| 438 | CABBIE | car |
+| 439 | STALLION | car |
+| 440 | RUMPO | car |
+| 441 | RCBANDIT | car |
+| 442 | ROMERO | car |
+| 443 | PACKER | car |
+| 444 | MONSTER | mtruck |
+| 445 | ADMIRAL | car |
+| 446 | SQUALO | boat |
+| 447 | SEASPAR | heli |
+| 448 | PIZZABOY | bike |
+| 449 | TRAM | train |
+| 450 | ARTICT2 | trailer |
+| 451 | TURISMO | car |
+| 452 | SPEEDER | boat |
+| 453 | REEFER | boat |
+| 454 | TROPIC | boat |
+| 455 | FLATBED | car |
+| 456 | YANKEE | car |
+| 457 | CADDY | car |
+| 458 | SOLAIR | car |
+| 459 | TOPFUN | car |
+| 460 | SKIMMER | plane |
+| 461 | PCJ600 | bike |
+| 462 | FAGGIO | bike |
+| 463 | FREEWAY | bike |
+| 464 | RCBARON | plane |
+| 465 | RCRAIDER | heli |
+| 466 | GLENDALE | car |
+| 467 | OCEANIC | car |
+| 468 | SANCHEZ | bike |
+| 469 | SPARROW | heli |
+| 470 | PATRIOT | car |
+| 471 | QUAD | quad |
+| 472 | COASTG | boat |
+| 473 | DINGHY | boat |
+| 474 | HERMES | car |
+| 475 | SABRE | car |
+| 476 | RUSTLER | plane |
+| 477 | ZR350 | car |
+| 478 | WALTON | car |
+| 479 | REGINA | car |
+| 480 | COMET | car |
+| 481 | BMX | bmx |
+| 482 | BURRITO | car |
+| 483 | CAMPER | car |
+| 484 | MARQUIS | boat |
+| 485 | BAGGAGE | car |
+| 486 | DOZER | car |
+| 487 | MAVERICK | heli |
+| 488 | VCNMAV | heli |
+| 489 | RANCHER | car |
+| 490 | FBIRANCH | car |
+| 491 | VIRGO | car |
+| 492 | GREENWOO | car |
+| 493 | JETMAX | boat |
+| 494 | HOTRING | car |
+| 495 | SANDKING | car |
+| 496 | BLISTAC | car |
+| 497 | POLMAV | heli |
+| 498 | BOXVILLE | car |
+| 499 | BENSON | car |
+| 500 | MESA | car |
+| 501 | RCGOBLIN | heli |
+| 502 | HOTRINA | car |
+| 503 | HOTRINB | car |
+| 504 | BLOODRA | car |
+| 505 | RNCHLURE | car |
+| 506 | SUPERGT | car |
+| 507 | ELEGANT | car |
+| 508 | JOURNEY | car |
+| 509 | BIKE | bmx |
+| 510 | MTBIKE | bmx |
+| 511 | BEAGLE | plane |
+| 512 | CROPDUST | plane |
+| 513 | STUNT | plane |
+| 514 | PETRO | car |
+| 515 | RDTRAIN | car |
+| 516 | NEBULA | car |
+| 517 | MAJESTIC | car |
+| 518 | BUCCANEE | car |
+| 519 | SHAMAL | plane |
+| 520 | HYDRA | plane |
+| 521 | FCR900 | bike |
+| 522 | NRG500 | bike |
+| 523 | COPBIKE | bike |
+| 524 | CEMENT | car |
+| 525 | TOWTRUCK | car |
+| 526 | FORTUNE | car |
+| 527 | CADRONA | car |
+| 528 | FBITRUCK | car |
+| 529 | WILLARD | car |
+| 530 | FORKLIFT | car |
+| 531 | TRACTOR | car |
+| 532 | COMBINE | car |
+| 533 | FELTZER | car |
+| 534 | REMINGTN | car |
+| 535 | SLAMVAN | car |
+| 536 | BLADE | car |
+| 537 | FREIGHT | train |
+| 538 | STREAK | train |
+| 539 | VORTEX | plane |
+| 540 | VINCENT | car |
+| 541 | BULLET | car |
+| 542 | CLOVER | car |
+| 543 | SADLER | car |
+| 544 | FIRELA | car |
+| 545 | HUSTLER | car |
+| 546 | INTRUDER | car |
+| 547 | PRIMO | car |
+| 548 | CARGOBOB | heli |
+| 549 | TAMPA | car |
+| 550 | SUNRISE | car |
+| 551 | MERIT | car |
+| 552 | UTILITY | car |
+| 553 | NEVADA | plane |
+| 554 | YOSEMITE | car |
+| 555 | WINDSOR | car |
+| 556 | MONSTERA | mtruck |
+| 557 | MONSTERB | mtruck |
+| 558 | URANUS | car |
+| 559 | JESTER | car |
+| 560 | SULTAN | car |
+| 561 | STRATUM | car |
+| 562 | ELEGY | car |
+| 563 | RAINDANC | heli |
+| 564 | RCTIGER | car |
+| 565 | FLASH | car |
+| 566 | TAHOMA | car |
+| 567 | SAVANNA | car |
+| 568 | BANDITO | car |
+| 569 | FREIFLAT | train |
+| 570 | STREAKC | train |
+| 571 | KART | car |
+| 572 | MOWER | car |
+| 573 | DUNERIDE | mtruck |
+| 574 | SWEEPER | car |
+| 575 | BROADWAY | car |
+| 576 | TORNADO | car |
+| 577 | AT400 | plane |
+| 578 | DFT30 | car |
+| 579 | HUNTLEY | car |
+| 580 | STAFFORD | car |
+| 581 | BF400 | bike |
+| 582 | NEWSVAN | car |
+| 583 | TUG | car |
+| 584 | PETROTR | trailer |
+| 585 | EMPEROR | emperor |
+| 586 | WAYFARER | wayfarer |
+| 587 | EUROS | car |
+| 588 | HOTDOG | car |
+| 589 | CLUB | car |
+| 590 | FREIBOX | train |
+| 591 | ARTICT3 | trailer |
+| 592 | ANDROM | plane |
+| 593 | DODO | dodo |
+| 594 | RCCAM | car |
+| 595 | LAUNCH | boat |
+| 596 | COPCARLA | car |
+| 597 | COPCARSF | car |
+| 598 | COPCARVG | car |
+| 599 | COPCARRU | car |
+| 600 | PICADOR | car |
+| 601 | SWATVAN | car |
+| 602 | ALPHA | car |
+| 603 | PHOENIX | car |
+| 604 | GLENSHIT | car |
+| 605 | SADLSHIT | car |
+| 606 | BAGBOXA | trailer |
+| 607 | BAGBOXB | trailer |
+| 608 | TUGSTAIR | trailer |
+| 609 | BOXBURG | car |
+| 610 | FARMTR1 | trailer |
+| 611 | UTILTR1 | trailer |
+
+### 10.2 人物模型 ID（276 个，peds.ide）
+
+| ID | 名称 |
+|---|---|
+| 0 | NULL |
+| 7 | MALE01 |
+| 9 | BFORI |
+| 10 | BFOST |
+| 11 | VBFYCRP |
+| 12 | BFYRI |
+| 13 | BFYST |
+| 14 | BMORI |
+| 15 | BMOST |
+| 16 | BMYAP |
+| 17 | BMYBU |
+| 18 | BMYBE |
+| 19 | BMYDJ |
+| 20 | BMYRI |
+| 21 | BMYCR |
+| 22 | BMYST |
+| 23 | WMYBMX |
+| 24 | WBDYG1 |
+| 25 | WBDYG2 |
+| 26 | WMYBP |
+| 27 | WMYCON |
+| 28 | BMYDRUG |
+| 29 | WMYDRUG |
+| 30 | HMYDRUG |
+| 31 | DWFOLC |
+| 32 | DWMOLC1 |
+| 33 | DWMOLC2 |
+| 34 | DWMYLC1 |
+| 35 | HMOGAR |
+| 36 | WMYGOL1 |
+| 37 | WMYGOL2 |
+| 38 | HFORI |
+| 39 | HFOST |
+| 40 | HFYRI |
+| 41 | HFYST |
+| 43 | HMORI |
+| 44 | HMOST |
+| 45 | HMYBE |
+| 46 | HMYRI |
+| 47 | HMYCR |
+| 48 | HMYST |
+| 49 | OMOKUNG |
+| 50 | WMYMECH |
+| 51 | BMYMOUN |
+| 52 | WMYMOUN |
+| 53 | OFORI |
+| 54 | OFOST |
+| 55 | OFYRI |
+| 56 | OFYST |
+| 57 | OMORI |
+| 58 | OMOST |
+| 59 | OMYRI |
+| 60 | OMYST |
+| 61 | WMYPLT |
+| 62 | WMOPJ |
+| 63 | BFYPRO |
+| 64 | HFYPRO |
+| 66 | BMYPOL1 |
+| 67 | BMYPOL2 |
+| 68 | WMOPREA |
+| 69 | SBFYST |
+| 70 | WMOSCI |
+| 71 | WMYSGRD |
+| 72 | SWMYHP1 |
+| 73 | SWMYHP2 |
+| 75 | SWFOPRO |
+| 76 | WFYSTEW |
+| 77 | SWMOTR1 |
+| 78 | WMOTR1 |
+| 79 | BMOTR1 |
+| 80 | VBMYBOX |
+| 81 | VWMYBOX |
+| 82 | VHMYELV |
+| 83 | VBMYELV |
+| 84 | VIMYELV |
+| 85 | VWFYPRO |
+| 87 | VWFYST1 |
+| 88 | WFORI |
+| 89 | WFOST |
+| 90 | WFYJG |
+| 91 | WFYRI |
+| 92 | WFYRO |
+| 93 | WFYST |
+| 94 | WMORI |
+| 95 | WMOST |
+| 96 | WMYJG |
+| 97 | WMYLG |
+| 98 | WMYRI |
+| 99 | WMYRO |
+| 100 | WMYCR |
+| 101 | WMYST |
+| 102 | BALLAS1 |
+| 103 | BALLAS2 |
+| 104 | BALLAS3 |
+| 105 | FAM1 |
+| 106 | FAM2 |
+| 107 | FAM3 |
+| 108 | LSV1 |
+| 109 | LSV2 |
+| 110 | LSV3 |
+| 111 | MAFFA |
+| 112 | MAFFB |
+| 113 | MAFBOSS |
+| 114 | VLA1 |
+| 115 | VLA2 |
+| 116 | VLA3 |
+| 117 | TRIADA |
+| 118 | TRIADB |
+| 120 | TRIBOSS |
+| 121 | DNB1 |
+| 122 | DNB2 |
+| 123 | DNB3 |
+| 124 | VMAFF1 |
+| 125 | VMAFF2 |
+| 126 | VMAFF3 |
+| 127 | VMAFF4 |
+| 128 | DNMYLC |
+| 129 | DNFOLC1 |
+| 130 | DNFOLC2 |
+| 131 | DNFYLC |
+| 132 | DNMOLC1 |
+| 133 | DNMOLC2 |
+| 134 | SBMOTR2 |
+| 135 | SWMOTR2 |
+| 136 | SBMYTR3 |
+| 137 | SWMOTR3 |
+| 138 | WFYBE |
+| 139 | BFYBE |
+| 140 | HFYBE |
+| 141 | SOFYBU |
+| 142 | SBMYST |
+| 143 | SBMYCR |
+| 144 | BMYCG |
+| 145 | WFYCRK |
+| 146 | HMYCM |
+| 147 | WMYBU |
+| 148 | BFYBU |
+| 150 | WFYBU |
+| 151 | DWFYLC1 |
+| 152 | WFYPRO |
+| 153 | WMYCONB |
+| 154 | WMYBE |
+| 155 | WMYPIZZ |
+| 156 | BMOBAR |
+| 157 | CWFYHB |
+| 158 | CWMOFR |
+| 159 | CWMOHB1 |
+| 160 | CWMOHB2 |
+| 161 | CWMYFR |
+| 162 | CWMYHB1 |
+| 163 | BMYBOUN |
+| 164 | WMYBOUN |
+| 165 | WMOMIB |
+| 166 | BMYMIB |
+| 167 | WMYBELL |
+| 168 | BMOCHIL |
+| 169 | SOFYRI |
+| 170 | SOMYST |
+| 171 | VWMYBJD |
+| 172 | VWFYCRP |
+| 173 | SFR1 |
+| 174 | SFR2 |
+| 175 | SFR3 |
+| 176 | BMYBAR |
+| 177 | WMYBAR |
+| 178 | WFYSEX |
+| 179 | WMYAMMO |
+| 180 | BMYTATT |
+| 181 | VWMYCR |
+| 182 | VBMOCD |
+| 183 | VBMYCR |
+| 184 | VHMYCR |
+| 185 | SBMYRI |
+| 186 | SOMYRI |
+| 187 | SOMYBU |
+| 188 | SWMYST |
+| 189 | WMYVA |
+| 190 | COPGRL3 |
+| 191 | GUNGRL3 |
+| 192 | MECGRL3 |
+| 193 | NURGRL3 |
+| 194 | CROGRL3 |
+| 195 | GANGRL3 |
+| 196 | CWFOFR |
+| 197 | CWFOHB |
+| 198 | CWFYFR1 |
+| 199 | CWFYFR2 |
+| 200 | CWMYHB2 |
+| 201 | DWFYLC2 |
+| 202 | DWMYLC2 |
+| 203 | OMYKARA |
+| 204 | WMYKARA |
+| 205 | WFYBURG |
+| 206 | VWMYCD |
+| 207 | VHFYPRO |
+| 209 | OMONOOD |
+| 210 | OMOBOAT |
+| 211 | WFYCLOT |
+| 212 | VWMOTR1 |
+| 213 | VWMOTR2 |
+| 214 | VWFYWAI |
+| 215 | SBFORI |
+| 216 | SWFYRI |
+| 217 | WMYCLOT |
+| 218 | SBFOST |
+| 219 | SBFYRI |
+| 220 | SBMOCD |
+| 221 | SBMORI |
+| 222 | SBMOST |
+| 223 | SHMYCR |
+| 224 | SOFORI |
+| 225 | SOFOST |
+| 226 | SOFYST |
+| 227 | SOMOBU |
+| 228 | SOMORI |
+| 229 | SOMOST |
+| 230 | SWMOTR5 |
+| 231 | SWFORI |
+| 232 | SWFOST |
+| 233 | SWFYST |
+| 234 | SWMOCD |
+| 235 | SWMORI |
+| 236 | SWMOST |
+| 237 | SHFYPRO |
+| 238 | SBFYPRO |
+| 239 | SWMOTR4 |
+| 240 | SWMYRI |
+| 241 | SMYST |
+| 242 | SMYST2 |
+| 243 | SFYPRO |
+| 244 | VBFYST2 |
+| 245 | VBFYPRO |
+| 246 | VHFYST3 |
+| 247 | BIKERA |
+| 248 | BIKERB |
+| 249 | BMYPIMP |
+| 250 | SWMYCR |
+| 251 | WFYLG |
+| 252 | WMYVA2 |
+| 253 | BMOSEC |
+| 254 | BIKDRUG |
+| 255 | WMYCH |
+| 256 | SBFYSTR |
+| 257 | SWFYSTR |
+| 258 | HECK1 |
+| 259 | HECK2 |
+| 260 | BMYCON |
+| 261 | WMYCD1 |
+| 262 | BMOCD |
+| 263 | VWFYWA2 |
+| 264 | WMOICE |
+| 274 | LAEMT1 |
+| 275 | LVEMT1 |
+| 276 | SFEMT1 |
+| 277 | LAFD1 |
+| 278 | LVFD1 |
+| 279 | SFFD1 |
+| 280 | LAPD1 |
+| 281 | SFPD1 |
+| 282 | LVPD1 |
+| 283 | CSHER |
+| 284 | LAPDM1 |
+| 285 | SWAT |
+| 286 | FBI |
+| 287 | ARMY |
+| 288 | DSHER |
+| 290 | SPECIAL01 |
+| 291 | SPECIAL02 |
+| 292 | SPECIAL03 |
+| 293 | SPECIAL04 |
+| 294 | SPECIAL05 |
+| 295 | SPECIAL06 |
+| 296 | SPECIAL07 |
+| 297 | SPECIAL08 |
+| 298 | SPECIAL09 |
+| 299 | SPECIAL10 |
+
+### 10.3 物体模型 ID（default.ide objs/hier 段，34 个）
+
+| ID | 名称 |
+|---|---|
+| 300 | CUTOBJ01 |
+| 301 | CUTOBJ02 |
+| 302 | CUTOBJ03 |
+| 303 | CUTOBJ04 |
+| 304 | CUTOBJ05 |
+| 305 | CUTOBJ06 |
+| 306 | CUTOBJ07 |
+| 307 | CUTOBJ08 |
+| 308 | CUTOBJ09 |
+| 309 | CUTOBJ10 |
+| 310 | CUTOBJ11 |
+| 311 | CUTOBJ12 |
+| 312 | CUTOBJ13 |
+| 313 | CUTOBJ14 |
+| 314 | CUTOBJ15 |
+| 315 | CUTOBJ16 |
+| 316 | CUTOBJ17 |
+| 317 | CUTOBJ18 |
+| 318 | CUTOBJ19 |
+| 319 | CUTOBJ20 |
+| 384 | CLOTHES01 |
+| 385 | CLOTHES01 |
+| 386 | CLOTHES01 |
+| 387 | CLOTHES01 |
+| 388 | CLOTHES01 |
+| 389 | CLOTHES01 |
+| 390 | CLOTHES01 |
+| 391 | CLOTHES01 |
+| 392 | CLOTHES01 |
+| 393 | CLOTHES01 |
+| 394 | SHANDL |
+| 395 | SHANDR |
+| 396 | FHANDL |
+| 397 | FHANDR |
+
+### 10.4 武器物件模型 ID（default.ide weap 段，51 个；用于生成武器物件——注意与武器*类型* ID 0-46 不同）
+
+| ID | 名称 |
+|---|---|
+| 320 | AIRTRAIN_VLO |
+| 321 | GUN_DILDO1 |
+| 322 | GUN_DILDO2 |
+| 323 | GUN_VIBE1 |
+| 324 | GUN_VIBE2 |
+| 325 | FLOWERA |
+| 326 | GUN_CANE |
+| 327 | GUN_BOXWEE |
+| 328 | GUN_BOXBIG |
+| 330 | CELLPHONE |
+| 331 | BRASSKNUCKLE |
+| 333 | GOLFCLUB |
+| 334 | NITESTICK |
+| 335 | KNIFECUR |
+| 336 | BAT |
+| 337 | SHOVEL |
+| 338 | POOLCUE |
+| 339 | KATANA |
+| 341 | CHNSAW |
+| 342 | GRENADE |
+| 343 | TEARGAS |
+| 344 | MOLOTOV |
+| 345 | MISSILE |
+| 346 | COLT45 |
+| 347 | SILENCED |
+| 348 | DESERT_EAGLE |
+| 349 | CHROMEGUN |
+| 350 | SAWNOFF |
+| 351 | SHOTGSPA |
+| 352 | MICRO_UZI |
+| 353 | MP5LNG |
+| 354 | FLARE |
+| 355 | AK47 |
+| 356 | M4 |
+| 357 | CUNTGUN |
+| 358 | SNIPER |
+| 359 | ROCKETLA |
+| 360 | HEATSEEK |
+| 361 | FLAME |
+| 362 | MINIGUN |
+| 363 | SATCHEL |
+| 364 | BOMB |
+| 365 | SPRAYCAN |
+| 366 | FIRE_EX |
+| 367 | CAMERA |
+| 368 | NVGOGGLES |
+| 369 | IRGOGGLES |
+| 370 | JETPACK |
+| 371 | GUN_PARA |
+| 372 | TEC9 |
+| 373 | ARMOUR |
+
+### 10.5 车辆改装件 ID（veh_mods.ide，194 个）
+
+| ID | 名称 |
+|---|---|
+| 1000 | SPL_B_MAR_M |
+| 1001 | SPL_B_BAB_M |
+| 1002 | SPL_B_BAR_M |
+| 1003 | SPL_B_MAB_M |
+| 1004 | BNT_B_SC_M |
+| 1005 | BNT_B_SC_L |
+| 1006 | RF_B_SC_R |
+| 1007 | WG_L_B_SSK |
+| 1008 | NTO_B_L |
+| 1009 | NTO_B_S |
+| 1010 | NTO_B_TW |
+| 1011 | BNT_B_SC_P_M |
+| 1012 | BNT_B_SC_P_L |
+| 1013 | LGT_B_RSPT |
+| 1014 | SPL_B_BAR_L |
+| 1015 | SPL_B_BBR_L |
+| 1016 | SPL_B_BBR_M |
+| 1017 | WG_R_B_SSK |
+| 1018 | EXH_B_TS |
+| 1019 | EXH_B_T |
+| 1020 | EXH_B_L |
+| 1021 | EXH_B_M |
+| 1022 | EXH_B_S |
+| 1023 | SPL_B_BBB_M |
+| 1024 | LGT_B_SSPT |
+| 1025 | WHEEL_OR1 |
+| 1026 | WG_L_A_S |
+| 1027 | WG_R_A_S |
+| 1028 | EXH_A_S |
+| 1029 | EXH_C_S |
+| 1030 | WG_R_C_S |
+| 1031 | WG_L_C_S |
+| 1032 | RF_A_S |
+| 1033 | RF_C_S |
+| 1034 | EXH_A_L |
+| 1035 | RF_C_L |
+| 1036 | WG_L_A_L |
+| 1037 | EXH_C_L |
+| 1038 | RF_A_L |
+| 1039 | WG_L_C_L |
+| 1040 | WG_R_A_L |
+| 1041 | WG_R_C_L |
+| 1042 | WG_L_LR_BR1 |
+| 1043 | EXH_LR_BR2 |
+| 1044 | EXH_LR_BR1 |
+| 1045 | EXH_C_F |
+| 1046 | EXH_A_F |
+| 1047 | WG_L_A_F |
+| 1048 | WG_L_C_F |
+| 1049 | SPL_A_F_R |
+| 1050 | SPL_C_F_R |
+| 1051 | WG_R_A_F |
+| 1052 | WG_R_C_F |
+| 1053 | RF_C_F |
+| 1054 | RF_A_F |
+| 1055 | RF_A_ST |
+| 1056 | WG_L_A_ST |
+| 1057 | WG_L_C_ST |
+| 1058 | SPL_A_ST_R |
+| 1059 | EXH_C_ST |
+| 1060 | SPL_C_ST_R |
+| 1061 | RF_C_ST |
+| 1062 | WG_R_A_ST |
+| 1063 | WG_R_C_ST |
+| 1064 | EXH_A_ST |
+| 1065 | EXH_A_J |
+| 1066 | EXH_C_J |
+| 1067 | RF_A_J |
+| 1068 | RF_C_J |
+| 1069 | WG_L_A_J |
+| 1070 | WG_L_C_J |
+| 1071 | WG_R_A_J |
+| 1072 | WG_R_C_J |
+| 1073 | WHEEL_SR6 |
+| 1074 | WHEEL_SR3 |
+| 1075 | WHEEL_SR2 |
+| 1076 | WHEEL_LR4 |
+| 1077 | WHEEL_LR1 |
+| 1078 | WHEEL_LR3 |
+| 1079 | WHEEL_SR1 |
+| 1080 | WHEEL_SR5 |
+| 1081 | WHEEL_SR4 |
+| 1082 | WHEEL_GN1 |
+| 1083 | WHEEL_LR2 |
+| 1084 | WHEEL_LR5 |
+| 1085 | WHEEL_GN2 |
+| 1086 | STEREO |
+| 1087 | HYDRALICS |
+| 1088 | RF_A_U |
+| 1089 | EXH_C_U |
+| 1090 | WG_L_A_U |
+| 1091 | RF_C_U |
+| 1092 | EXH_A_U |
+| 1093 | WG_L_C_U |
+| 1094 | WG_R_A_U |
+| 1095 | WG_R_C_U |
+| 1096 | WHEEL_GN3 |
+| 1097 | WHEEL_GN4 |
+| 1098 | WHEEL_GN5 |
+| 1099 | WG_R_LR_BR1 |
+| 1100 | MISC_C_LR_REM1 |
+| 1101 | WG_R_LR_REM1 |
+| 1102 | WG_R_LR_SV |
+| 1103 | RF_LR_BL2 |
+| 1104 | EXH_LR_BL1 |
+| 1105 | EXH_LR_BL2 |
+| 1106 | WG_L_LR_REM2 |
+| 1107 | WG_R_LR_BL1 |
+| 1108 | WG_L_LR_BL1 |
+| 1109 | BBB_LR_SLV1 |
+| 1110 | BBB_LR_SLV2 |
+| 1111 | BNT_LR_SLV1 |
+| 1112 | BNT_LR_SLV2 |
+| 1113 | EXH_LR_SLV1 |
+| 1114 | EXH_LR_SLV2 |
+| 1115 | FBB_LR_SLV1 |
+| 1116 | FBB_LR_SLV2 |
+| 1117 | FBMP_LR_SLV1 |
+| 1118 | WG_L_LR_SLV1 |
+| 1119 | WG_L_LR_SLV2 |
+| 1120 | WG_R_LR_SLV1 |
+| 1121 | WG_R_LR_SLV2 |
+| 1122 | WG_L_LR_REM1 |
+| 1123 | MISC_C_LR_REM2 |
+| 1124 | WG_R_LR_REM2 |
+| 1125 | MISC_C_LR_REM3 |
+| 1126 | EXH_LR_REM1 |
+| 1127 | EXH_LR_REM2 |
+| 1128 | RF_LR_BL1 |
+| 1129 | EXH_LR_SV1 |
+| 1130 | RF_LR_SV1 |
+| 1131 | RF_LR_SV2 |
+| 1132 | EXH_LR_SV2 |
+| 1133 | WG_L_LR_SV |
+| 1134 | WG_L_LR_T1 |
+| 1135 | EXH_LR_T2 |
+| 1136 | EXH_LR_T1 |
+| 1137 | WG_R_LR_T1 |
+| 1138 | SPL_A_S_B |
+| 1139 | SPL_C_S_B |
+| 1140 | RBMP_C_S |
+| 1141 | RBMP_A_S |
+| 1142 | BNTR_B_OV |
+| 1143 | BNTL_B_OV |
+| 1144 | BNTR_B_SQ |
+| 1145 | BNTL_B_SQ |
+| 1146 | SPL_C_L_B |
+| 1147 | SPL_A_L_B |
+| 1148 | RBMP_C_L |
+| 1149 | RBMP_A_L |
+| 1150 | RBMP_A_F |
+| 1151 | RBMP_C_F |
+| 1152 | FBMP_C_F |
+| 1153 | FBMP_A_F |
+| 1154 | RBMP_A_ST |
+| 1155 | FBMP_A_ST |
+| 1156 | RBMP_C_ST |
+| 1157 | FBMP_C_ST |
+| 1158 | SPL_C_J_B |
+| 1159 | RBMP_A_J |
+| 1160 | FBMP_A_J |
+| 1161 | RBMP_C_J |
+| 1162 | SPL_A_J_B |
+| 1163 | SPL_C_U_B |
+| 1164 | SPL_A_U_B |
+| 1165 | FBMP_C_U |
+| 1166 | FBMP_A_U |
+| 1167 | RBMP_C_U |
+| 1168 | RBMP_A_U |
+| 1169 | FBMP_A_S |
+| 1170 | FBMP_C_S |
+| 1171 | FBMP_A_L |
+| 1172 | FBMP_C_L |
+| 1173 | FBMP_C_J |
+| 1174 | FBMP_LR_BR1 |
+| 1175 | FBMP_LR_BR2 |
+| 1176 | RBMP_LR_BR1 |
+| 1177 | RBMP_LR_BR2 |
+| 1178 | RBMP_LR_REM2 |
+| 1179 | FBMP_LR_REM1 |
+| 1180 | RBMP_LR_REM1 |
+| 1181 | FBMP_LR_BL2 |
+| 1182 | FBMP_LR_BL1 |
+| 1183 | RBMP_LR_BL2 |
+| 1184 | RBMP_LR_BL1 |
+| 1185 | FBMP_LR_REM2 |
+| 1186 | RBMP_LR_SV2 |
+| 1187 | RBMP_LR_SV1 |
+| 1188 | FBMP_LR_SV2 |
+| 1189 | FBMP_LR_SV1 |
+| 1190 | FBMP_LR_T2 |
+| 1191 | FBMP_LR_T1 |
+| 1192 | RBMP_LR_T1 |
+| 1193 | RBMP_LR_T2 |
+
+### 10.6 武器类型 ID（GTASA 官方 WeapType 枚举，0-46）
+
+| ID | 武器 | ID | 武器 | ID | 武器 |
+|---|---|---|---|---|---|
+| 0 | Fist (UNARMED) | 16 | Grenade | 32 | Tec9 |
+| 1 | Brass Knuckles | 17 | Tear Gas | 33 | Country Rifle |
+| 2 | Golf Club | 18 | Molotov | 34 | Sniper Rifle |
+| 3 | Nightstick | 19 | Rocket (投掷) | 35 | Rocket Launcher |
+| 4 | Knife | 20 | Rocket HS (热追踪) | 36 | Heat Seeker |
+| 5 | Baseball Bat | 21 | Freefall Bomb | 37 | Flamethrower |
+| 6 | Shovel | 22 | Colt 45 (Pistol) | 38 | Minigun |
+| 7 | Pool Cue | 23 | Silenced Pistol | 39 | Satchel Charge |
+| 8 | Katana | 24 | Desert Eagle | 40 | Detonator |
+| 9 | Chainsaw | 25 | Shotgun | 41 | Spraycan |
+| 10 | Dildo 1 | 26 | Sawnoff Shotgun | 42 | Fire Extinguisher |
+| 11 | Dildo 2 | 27 | Combat Shotgun | 43 | Camera |
+| 12 | Vibrator 1 | 28 | Uzi | 44 | Night Vision |
+| 13 | Vibrator 2 | 29 | MP5 | 45 | Infrared (Thermal) |
+| 14 | Flowers | 30 | AK47 | 46 | Parachute |
+| 15 | Cane | 31 | M4 | | |
+
+装备示例（先 `0247: load_model` 加载武器模型，`01B2` 官方注释要求）：
+```scm
+0247: load_model 348      ; desert_eagle 模型
+while 8248:   not model 348 available
+    wait 0
+end
+01B2: give_actor $PLAYER_ACTOR weapon 24 ammo 100
+0249: release_model 348
+```
+
+### 10.6b 武器→模型 ID（官方 weapon.dat，`0247: load_model <ID>` 用）
+
+| 武器 | 模型 ID | 武器 | 模型 ID | 武器 | 模型 ID |
+|---|---|---|---|---|---|
+| BRASSKNUCKLE | 331 | GOLFCLUB | 333 | NIGHTSTICK | 334 |
+| KNIFE | 335 | BASEBALLBAT | 336 | SHOVEL | 337 |
+| POOLCUE | 338 | KATANA | 339 | CHAINSAW | 341 |
+| DILDO1 | 321 | DILDO2 | 322 | VIBE1 | 323 |
+| VIBE2 | 324 | FLOWERS | 325 | CANE | 326 |
+| PARACHUTE | 371 | GRENADE | 342 | TEARGAS | 343 |
+| MOLOTOV | 344 | ROCKET/ROCKET_HS/FREEFALL_BOMB | 345 | PISTOL | 346 |
+| PISTOL_SILENCED | 347 | DESERT_EAGLE | 348 | SHOTGUN | 349 |
+| SAWNOFF | 350 | SPAS12 | 351 | MICRO_UZI | 352 |
+| TEC9 | 372 | MP5 | 353 | AK47 | 355 |
+| M4 | 356 | COUNTRYRIFLE | 357 | SNIPERRIFLE | 358 |
+| RLAUNCHER | 359 | RLAUNCHER_HS | 360 | FTHROWER | 361 |
+| MINIGUN | 362 | SATCHEL_CHARGE | 363 | DETONATOR | 364 |
+| SPRAYCAN | 365 | EXTINGUISHER | 366 | CAMERA | 367 |
+| NIGHTVISION | 368 | INFRARED | 369 | | |
+
+### 10.7 按键码
+
+**0AB0 key_pressed（CLEO，Windows 虚拟键码 VK）**
+| 键 | 码 | 键 | 码 | 键 | 码 |
+|---|---|---|---|---|---|
+| 空格 | 32 | A-Z | 65-90 | 0-9 | 48-57 |
+| 回车 | 13 | 退格 | 8 | Esc | 27 |
+| Shift | 16 | Ctrl | 17 | Alt | 18 |
+| Tab | 9 | F1-F12 | 112-123 | 小键盘0-9 | 96-105 |
+| 上下左右 | 38/40/37/39 | 鼠标左/右 | 1/2 | 鼠标中 | 4 |
+
+**00E1 player pressed_key（游戏按键绑定枚举）**：数字对应游戏内"set key"绑定索引（非 VK 码），用编辑器的按键绑定界面查看对应数字；脚本常见用 `00E1: player 0 pressed_key 2`（动作键）。
+
+### 10.8 天气 ID（GTA SA 天气表常用）
+| ID | 天气 | ID | 天气 |
+|---|---|---|---|
+| 0 | EXTRASUNNY_LA | 8 | SUNNY_SMOG_LA |
+| 1 | SUNNY_LA | 14 | CLOUDY_LA |
+| 2 | EXTRASUNNY_SMOG_LA | 16 | RAINY_COUNTRYSIDE |
+| 3 | SUNNY_SMOG_LA | 17 | EXTRASUNNY_DESERT |
+| 4 | CLOUDY_LA | 20 | SANDY_DESERT |
+| 5 | RAINY_SF | 41 | FOGGY_SF (未用) |
+| 6 | FOGGY_SF | 42 | SUNNY_SMOG_SF (未用) |
+
+### 10.9 常用坐标（SA 世界 -3000..3000）
+| 地点 | X | Y | Z |
+|---|---|---|---|
+| Grove Street（CJ 家） | 2494.0 | -1668.0 | 13.3 |
+| 圣安地列斯市中心 | 1000.0 | -1000.0 | 20.0 |
+| 洛圣都沙滩 | 330.0 | -1800.0 | -5.0 |
+| 沙漠机场 | 315.0 | 2400.0 | 18.0 |
+| SF 金门 | -2750.0 | 250.0 | 7.0 |
+| LV 赌场区 | 2240.0 | 1300.0 | 25.0 |
+
+### 10.10 常用内置全局（CustomVariables.ini）
+| 全局 | ID | 说明 |
+|---|---|---|
+| $PLAYER_CHAR | 2 | 玩家 handle |
+| $PLAYER_ACTOR | 3 | 玩家 actor handle |
+| $ONMISSION | 409 | 1=任务中 |
+| 其余 | - | 注册表见 `sa/CustomVariables.ini`（编译自动加载） |
+
+## 11. 参考数据文件（编译器同源，可自行查全）
 
 - `app/src/main/assets/sanny/data/sa/SASCM.INI`（基础，数千条）
 - `sa/SASCM.CLEO.ini`（CLEO 特有）· `sa/SASCM.CLEO+.ini`（CLEO+ 扩展）· `sa/SASCM.NewOpcodes.ini`
