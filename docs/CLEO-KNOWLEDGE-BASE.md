@@ -747,6 +747,84 @@ end
 
 ---
 
+## 6.2 CLEO ANDROID（C/A）触摸系统——屏幕九宫格 touch points
+
+> 来源：CLEO 官方 Android 加载器 README（<https://github.com/cleolibrary/CLEO-ANDROID>）。**注意**：C/A 是与本项目编译器数据（SASCM.Mobile.ini）并列的**另一套 Mobile CLEO 实现**，C/A 专用 opcode（0DD0-0DE6、0DF2-0DF6、1000）**未收录在 SASCM.Mobile.ini**——用 C/A 脚本前需把这些声明追加进编译器的 SCM.INI（README 提供了完整声明文本），或有收录该表的环境。
+
+### 9 格触摸区（touch points，ID 1-9）
+
+C/A 把触摸屏均分为 9 个区域，检测"点按"与"滑动"：
+
+```
+┌─────────┬─────────┬─────────┐
+│   1     │   4     │   7     │   上排
+│ LEFT-TOP│ CENTER  │ RIGHT-  │
+│         │ -TOP    │ TOP     │
+├─────────┼─────────┼─────────┤
+│   2     │   5     │   8     │   中排
+│ LEFT-   │ CENTER  │ RIGHT-  │
+│ CENTER  │         │ CENTER  │
+├─────────┼─────────┼─────────┤
+│   3     │   6     │   9     │   下排
+│ LEFT-   │ CENTER  │ RIGHT-  │
+│ BOTTOM  │ -BOTTOM │ BOTTOM  │
+└─────────┴─────────┴─────────┘
+  左列      中列      右列
+```
+
+### 触摸 opcode（C/A）
+
+| opcode | 签名 | 说明 |
+|---|---|---|
+| 0DE0 | `%1d% = get_touch_point_state %2d% mintime %3d%` | **检测 1-9 号触摸区按住**（id, 最小按住 ms）；返回 0/1 |
+| 0DE1 | `%1d% = get_touch_slide_state from %2d% to %3d% mintime %4d% maxtime %5d%` | 检测**滑动**（起点格→终点格，限时窗口） |
+| 0DE2 | `%1d% = get_menu_button_state` | 安卓系统菜单键状态 |
+| 0DE3 | `%1d% = get_menu_button_pressed mintime %2d%` | 菜单键按下 |
+
+示例（九宫格点按，旧式写法）：
+```scm
+{$CLEO .csa}
+0000:
+:L
+wait 0
+00D6: if 0DE0: 5 = get_touch_point_state 5 mintime 100   ; 正中央格按住 100ms
+004D: jump_if_false @L
+0ACD: show_text_highpriority 'CLEOOK' time 800
+0002: jump @L
+```
+
+### C/A 触摸菜单（0DF2-0DF6）
+
+| opcode | 签名 | 说明 |
+|---|---|---|
+| 0DF2 | `create_menu %1d% items %2d%` | 建菜单（Android 触控 / PSP 按键） |
+| 0DF3 | `delete_menu` | 删菜单 |
+| 0DF4 | `%1d% = get_menu_touched_item_index maxtime %2d%` | 触摸项索引（0 基；-1 无、-2 关闭菜单） |
+| 0DF5 | `set_menu_active_item_index %1d%` | 设活动项 |
+| 0DF6 | `%1d% = get_menu_active_item_index` | 读活动项 |
+
+### C/A 平台/内存（0DD0-0DDE）
+
+| opcode | 签名 | 说明 |
+|---|---|---|
+| 0DD0 | `%1d% = get_label_addr %2p%` | 标签真实地址 |
+| 0DD1 | `%1d% = get_func_addr_by_cstr_name %2d%` | 导出函数地址（PSP 恒 0） |
+| 0DD5 | `%1d% = get_platform` | Android=1、PSP=2 |
+| 0DD6 | `%1d% = get_game_version` | 游戏内部版本 |
+| 0DD7 | `%1d% = get_image_base` | 主库镜像基址 |
+| 0DD8 | `%1d% = read_mem_addr %2d% size %3d% add_ib %4d%` | 读内存（add_ib=1 加镜像基址） |
+| 0DD9 | `write_mem_addr %1d% value %2d% size %3d% add_ib %4d% protect %5d%` | 写内存 |
+| 0DDC/0DDD | `set_mutex_var %1d% to %2d%` / `%1d% = get_mutex_var %2d%` | 跨脚本共享变量（id 任意整数） |
+| 0DDE | `call_func %1d% add_ib %2d% ...` | 调用游戏函数（'i'/'f'/'ref'/'resi'/'resf'） |
+| 1000 | `opcode_func ...` | 插件函数（name 参数） |
+
+### C/A 脚本加载机制（与 PC CLEO 不同）
+
+- 放置：`%sdcard%/cleo/sa/`（iii/vc/sa/lcs 按游戏）
+- **`.csa`**：游戏加载即自动启动；**`.csi`**：通过游戏内菜单手动调用（下拉手势呼出菜单）
+- 需 root（SA Mobile v1.00-2.00 等；Android 4.1-11）
+- PC 脚本常需改写（PC 定向 opcode/控制不适用）
+
 ## 7. 全局变量注册（CustomVariables.ini 节选）
 
 ```
