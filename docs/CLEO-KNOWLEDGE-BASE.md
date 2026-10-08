@@ -92,6 +92,8 @@ end
 - `'xxx'`：**string8**
 - `@LABEL`：**int32**（= -(11+偏移)）
 - `not <名称>` 前缀：opcode 第二字节 **\| 0x80**
+- 数组：`0@(1@)` / `$X(0@)`（方括号 `0@[1]` / `$X[0]` 同样支持）；`$` 基址为全局变量号，`(n)` 下标可为 lvar/全局/数字
+- 布尔字面量 `false/true/yes/no/on/off` 自动编码 0/1（如 `0A8C: write_memory ... false`）
 
 ---
 
@@ -857,6 +859,15 @@ if 0038: $500 == 0 then ... end   ; 到 0 触发
 | 变参 `0ACE` 等（参数数 -1） | ⚠️ 兼容风险 | 用定参 0ACD/01E3 |
 | `terminate_this_custom_script` | ✅ | `0A93:`（标准） |
 | if/while 嵌套、then/else/end | ✅ | 条件行写全 HEX |
+| 指令名拼错（`show_text_highpriorityy`） | ❌ 编辑器校验 | 指令名与数据库不符会报错并提示规范写法 |
+| 重复标签（`:DUP` 定义两次） | ❌ 报错 | 每个标签只定义一次 |
+| 参数过多/不足 | ❌ 分别报错 | 参数个数须与指令一致 |
+| 字符串超过 8 字符（`'THISISALONG'`） | ❌ 报错 | 文本标签定长 8 字符，用短词/数字 |
+| 全局变量超范围（`$20000`） | ❌ 报错 | 全局变量范围 0-16381 |
+| 布尔字面量 `false/true`（`write_memory ... false`） | ✅ | 按 0/1 编码 |
+| `0AD3`/`0AD4`（string_format/scan_string 变参） | ❌ 暂不支持 | 改用 0AD0 拼接 / 0AD2 切串 |
+
+> 旧式 `00D6` 条件：同行与后续行均支持，`if not` / `if and` / `if or` 前缀可用，字节码正确（条件 opcode 完整保留）。
 
 ---
 

@@ -62,12 +62,31 @@ public class Main {
         GameMode gm = resolveMode(mode);
         if (gm == null) { err("未知模式: " + mode + "（可用: gtasa, gtasa_mobile）"); System.exit(2); }
 
-        String source = new String(Files.readAllBytes(Paths.get(input)), StandardCharsets.UTF_8);
+        String source;
+        try {
+            source = new String(Files.readAllBytes(Paths.get(input)), StandardCharsets.UTF_8);
+        } catch (java.nio.file.NoSuchFileException e) {
+            err("找不到输入文件: " + input);
+            System.exit(1);
+            return;
+        } catch (IOException e) {
+            err("无法读取输入文件 " + input + ": " + e.getMessage());
+            System.exit(1);
+            return;
+        }
+        // 容错：去掉 UTF-8 BOM（Windows 记事本保存会带）
+        if (source.startsWith("\uFEFF")) source = source.substring(1);
+        if (source.trim().isEmpty()) {
+            err("输入为空：没有可编译的内容（脚本至少要有 {$CLEO .cs} 头与指令）");
+            System.exit(1);
+            return;
+        }
         Result r = compile(gm, source);
         if (r.error != null) {
             System.err.println("编译失败:");
             System.err.println(r.error);
             System.exit(1);
+            return;
         }
         try {
             Files.write(Paths.get(output), r.bytes);
