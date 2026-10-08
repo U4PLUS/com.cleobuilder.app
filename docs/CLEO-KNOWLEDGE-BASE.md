@@ -824,7 +824,7 @@ wait 0
 
 - 放置：`%sdcard%/cleo/sa/`（iii/vc/sa/lcs 按游戏）
 - **`.csa`**：游戏加载即自动启动；**`.csi`**：通过游戏内菜单手动调用（下拉手势呼出菜单）
-- 需 root（SA Mobile v1.00-2.00 等；Android 4.1-11）
+- **无需 root**（现阶段；SA Mobile 2.0 起支持无 root 安装 CLEO；仅旧版 C/A 2.0.x 才要求 root）
 - PC 脚本常需改写（PC 定向 opcode/控制不适用）
 
 ## 7. 全局变量注册（CustomVariables.ini 节选）
