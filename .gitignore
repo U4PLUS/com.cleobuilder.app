@@ -8,3 +8,8 @@
 /captures
 .externalNativeBuild
 .cxx
+
+# DSH 插件编译产物
+/dsh-plugin/cleo-compiler/build/
+/dsh-plugin/cleo-compiler/out/
+/cleo_builds/
