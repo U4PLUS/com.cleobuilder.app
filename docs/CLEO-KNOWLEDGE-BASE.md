@@ -749,7 +749,9 @@ end
 
 ## 6.2 CLEO ANDROID（C/A）触摸系统——屏幕九宫格 touch points
 
-> 来源：CLEO 官方 Android 加载器 README（<https://github.com/cleolibrary/CLEO-ANDROID>）。**注意**：C/A 是与本项目编译器数据（SASCM.Mobile.ini）并列的**另一套 Mobile CLEO 实现**，C/A 专用 opcode（0DD0-0DE6、0DF2-0DF6、1000）**未收录在 SASCM.Mobile.ini**——用 C/A 脚本前需把这些声明追加进编译器的 SCM.INI（README 提供了完整声明文本），或有收录该表的环境。
+> 来源：CLEO 官方 Android 加载器 README（<https://github.com/cleolibrary/CLEO-ANDROID>）。
+> **编译器已收录**：SA_MOBILE 模式数据 = SA 基础 + Mobile 触摸（0A51 系列）+ C/A opcode（SASCM.CLEO.ini / SASCM.CA.ini）+ 标准 CLEO 4 全表（SASCM.CLEO.STD.ini，0A8C-0B1D），**全部实测编译通过**。
+> 触摸类条件（0DE0/0DE1/0A51 等）不在条件判定表 → if 块内请用旧式 `00D6+004D`（已验证）。
 
 ### 9 格触摸区（touch points，ID 1-9）
 
@@ -1827,6 +1829,6 @@ end
 
 - `app/src/main/assets/sanny/data/sa/SASCM.INI`（基础，数千条）
 - `sa/SASCM.CLEO.ini`（CLEO 特有）· `sa/SASCM.CLEO+.ini`（CLEO+ 扩展）· `sa/SASCM.NewOpcodes.ini`
-- `sa_mobile/SASCM.Mobile.ini`（Mobile 特有）
+- `sa_mobile/SASCM.Mobile.ini`（Mobile 触摸 0A51 系列）· `sa_mobile/SASCM.CLEO.ini`（C/A Android opcode）· `sa_mobile/SASCM.CLEO.STD.ini`（标准 CLEO 4 副本，Mobile 模式已挂载）· `sa_mobile/SASCM.CA.ini`（C/A 补充 0DDA/0DDB/0DDE/0DF2-0DF6/1000）
 - `opcode_conds.json`（条件判定表）· `opcode_types.json` · `opcode_names.json` · `CustomVariables.ini`（全局注册）
 - 在线：<https://gtagmodding.com/opcode-database/> · <https://cleo.li/> · <https://docs.sannybuilder.com/>

@@ -14,7 +14,7 @@ public enum GameMode {
             Arrays.asList("VCSCM.INI", "VCSCM.Mobile.ini", "VCSCM.CLEO.ini"), Encoding.TYPED),
     GTASA("sa", "GTA SA", "sa", Arrays.asList("SASCM.INI", "SASCM.CLEO.ini", "SASCM.CLEO+.ini", "SASCM.NewOpcodes.ini"), Encoding.SA),
     SA_MOBILE("sa_mobile", "GTA SA Mobile", "sa_mobile",
-            Arrays.asList("SASCM.ini", "SASCM.Mobile.ini", "SASCM.CLEO.ini"), Encoding.SA),
+            Arrays.asList("SASCM.ini", "SASCM.Mobile.ini", "SASCM.CLEO.ini", "SASCM.CLEO.STD.ini", "SASCM.CA.ini"), Encoding.SA),
     SA_PS2("sa_ps2", "GTA SA PS2", "sa_ps2",
             Arrays.asList("SASCM.INI", "SASCM.CLEO.ini", "SASCM.PS2.INI"), Encoding.SA),
     SA_V2("sa_v2", "GTA SA v2", "sa",
