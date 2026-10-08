@@ -9,7 +9,7 @@
 
 【文件清单】
   cleobuilder.jar           编译器本体（依赖：JRE 17+）
-  CLEO-KNOWLEDGE-BASE.md    CLEO 脚本知识库（供 AI / 人查询的完整资料）
+  CLEO-KNOWLEDGE-BASE.md    CLEO 脚本知识库（完整资料）
   README.txt                本说明
 
 --------------------------------------------------------------
@@ -18,21 +18,21 @@
   除 Java 外无任何依赖，无需联网，数据全部内置。
 
 --------------------------------------------------------------
-【使用方法】（人也可以直接用）
+【使用方法】
 
   最简单的用法 —— 三个位置参数：
 
       java -jar cleobuilder.jar <输入.cs> <输出文件> [模式]
 
-  例：把 myscript.cs 编译为 myscript.cs.out（默认 PC 模式）：
-      java -jar cleobuilder.jar myscript.cs myscript.cs.out
+  例：把 myscript.txt 编译为 myscript.cs（默认 PC 模式）：
+      java -jar cleobuilder.jar myscript.txt myscript.cs
 
   例：编译 Android 版脚本（模式 gtasa_mobile）：
-      java -jar cleobuilder.jar myscript.cs myscript.cs.out gtasa_mobile
+      java -jar cleobuilder.jar myscript.txt myscript.csi gtasa_mobile
 
   也可以用命名参数：
 
-      java -jar cleobuilder.jar -i myscript.cs -o out.bin -m gtasa_mobile
+      java -jar cleobuilder.jar -i myscript.txt -o myscript.csi -m gtasa_mobile
 
 --------------------------------------------------------------
 【参数说明】
