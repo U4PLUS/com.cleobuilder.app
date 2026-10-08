@@ -104,7 +104,11 @@ public final class TypedCompiler {
             Matcher lm = Pattern.compile("^:([A-Za-z0-9_]+)\\s*$").matcher(line);
             if (lm.matches()) {
                 String label = lm.group(1);
-                if (labelOffsets.containsKey(label)) continue; // 重复标签忽略
+                if (labelOffsets.containsKey(label)) {
+                    err.append("重复标签: :").append(label).append("（此前已定义）");
+                    err.insert(0, "第 " + lineNo + " 行: ");
+                    return null;
+                }
                 labelOffsets.put(label, pos);
                 labels.put(pos, label);
                 continue;
@@ -287,26 +291,91 @@ public final class TypedCompiler {
             if (def == null && negHex) def = table.get(hx & 0x7FFF);
             if (def == null) { err.append("未知 opcode ").append(lm.group(1)); return; }
             io.def = def; io.neg = negHex; namePart = null; argsPart = lm.group(2);
+
+            // 旧式 if 头：00D6: if [not|and|or] <条件行>（同行条件，如 "00D6: if 0248: model 411 available"）
+            if (hx == 0x00D6) {
+                String rest = argsPart.trim();
+                boolean notFlag = false;
+                int ifArg = 0;
+                String low = rest.toLowerCase(Locale.ROOT);
+                if (low.startsWith("if ")) { rest = rest.substring(3).trim(); low = rest.toLowerCase(Locale.ROOT); }
+                else if (low.contentEquals("if")) { rest = ""; low = ""; }
+                if (low.startsWith("not ")) { notFlag = true; rest = rest.substring(4).trim(); }
+                else if (low.startsWith("and ")) { ifArg = 3; rest = rest.substring(4).trim(); }
+                else if (low.startsWith("or ")) { ifArg = 2; rest = rest.substring(3).trim(); }
+                io.def = def;
+                io.neg = false; // not 只作用于条件 opcode（extra[1]|=0x80），00D6 本身不置位
+                namePart = null;
+                argsPart = rest;
+                io.isIfHead = true;
+                io.tokens = new String[] { String.valueOf(ifArg) };
+                io.widths = new int[] { 2 };
+                if (!rest.isEmpty()) {
+                    byte[] extra = compileLine(rest, table, globalsByName, err);
+                    if (err.length() > 0) return;
+                    if (notFlag && extra != null && extra.length >= 2) extra[1] = (byte) (extra[1] | 0x80);
+                    io.extra = extra;
+                }
+                return;
+            }
+            // 0AD3/0AD4 变参（sprintf 格式串）：暂不支持，报错避免生成错误字节码
+            if (def.argCount < 0 && (hx == 0xAD3 || hx == 0xAD4)) {
+                err.append("变参指令 0AD3/0AD4（string_format/scan_string）暂不支持");
+                return;
+            }
+
             // hex 行：宽松参数提取（跳过名称/字面量词 token，如 "0175: set_car_heading 7@ to 6@"）
             List<String> toks0 = splitArgs(line);
+            java.util.Set<String> BOOL_WORDS = java.util.Set.of("false", "true", "yes", "no", "on", "off");
             List<String> params = new ArrayList<>();
             for (int k = 1; k < toks0.size(); k++) {
                 String tk = toks0.get(k);
-                if (!isParamToken(tk)) continue;
+                if (!isParamToken(tk)) {
+                    if (BOOL_WORDS.contains(tk.toLowerCase(Locale.ROOT))) { params.add(tk); } // 布尔字面量也是参数（如 write_memory ... false）
+                    continue;
+                }
                 params.add(tk);
+            }
+            // 指令名校验（宽松）：非参数字母词须与表内名称/格式有交集，防拼错静默通过
+            List<String> nameToks = new ArrayList<>();
+            for (int k = 1; k < toks0.size(); k++) {
+                String tk = toks0.get(k);
+                if (tk.length() > 0 && Character.isLetter(tk.charAt(0)) && !isParamToken(tk)) {
+                    String low = tk.toLowerCase(Locale.ROOT);
+                    if (BOOL_WORDS.contains(low)) continue; // 布尔字面量（如 write_memory ... false）
+                    nameToks.add(low);
+                }
+            }
+            if (!nameToks.isEmpty()) {
+                String full = (def.name + " " + def.format).toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_\\s]", " ");
+                boolean hit = true;
+                for (String nt : nameToks) {
+                    if (!full.contains(nt.replaceAll("[^a-z0-9_]", ""))) { hit = false; break; }
+                }
+                if (!hit) {
+                    err.append("指令名与数据库不符: ").append(nameToks)
+                       .append("（").append(String.format("%04X", def.id))
+                       .append(" 的规范写法: ").append(def.format).append("）");
+                    return;
+                }
             }
             if (params.size() < def.params.size()) {
                 err.append("参数不足: ").append(line)
                    .append(" (需要 ").append(def.params.size()).append(" 个)");
                 return;
             }
-            String[] rawArgs = params.subList(0, def.params.size()).toArray(new String[0]);
+            if (params.size() > def.params.size()) {
+                err.append("参数过多: ").append(line)
+                   .append(" (该指令需要 ").append(def.params.size()).append(" 个参数，实际 ").append(params.size()).append(" 个)");
+                return;
+            }
+            String[] rawArgs = params.toArray(new String[0]);
             io.tokens = new String[def.params.size()];
             io.widths = new int[def.params.size()];
             for (int k = 0; k < def.params.size(); k++) {
                 OpcodeTable.Placeholder ph = def.params.get(k);
                 int w = argWidth(ph, rawArgs[k], hx, err);
-                if (w < 0) { err.append(line).append(": ").append(err); return; }
+                if (w < 0) { return; }
                 io.tokens[ph.index - 1] = rawArgs[k];
                 io.widths[ph.index - 1] = w;
             }
@@ -604,6 +673,18 @@ public final class TypedCompiler {
 
     /** 参数编码宽度（含类型字节） */
     private static int argWidth(OpcodeTable.Placeholder ph, String tok, int op, StringBuilder err) {
+        boolean isQuote = (tok.startsWith("'") && tok.endsWith("'") && tok.length() >= 2)
+                       || (tok.startsWith("\"") && tok.endsWith("\"") && tok.length() >= 2);
+        if (isQuote) {
+            if (ph.type == 's' || ph.type == 'g' || ph.type == 'k') return 1 + 8; // 字符串参数
+            err.append("该参数应为数字，不能是字符串: ").append(tok);
+            return -1;
+        }
+        String lowTok = tok.toLowerCase(Locale.ROOT);
+        if (lowTok.equals("false") || lowTok.equals("no") || lowTok.equals("off")
+                || lowTok.equals("true") || lowTok.equals("yes") || lowTok.equals("on")) {
+            return 1 + 1; // 布尔字面量 → int8 0/1（在 e 判定前）
+        }
         if (ph.type == 'p') return 1 + 4; // int32
         if (ph.type == 'f') return 1 + 4; // float32
         if (ph.type == 'g' || ph.type == 's' || ph.type == 'k') return 1 + 8; // string8
@@ -615,7 +696,9 @@ public final class TypedCompiler {
         }
         if (tok.endsWith("@")) return 1 + 2; // lvar
         if (tok.contains(".") || tok.contains("e") || tok.contains("E")) return 1 + 4; // float32
-        return 1 + intWidth(parseNum(tok, err));
+        long num = parseNum(tok, err);
+        if (err.length() > 0) { err.insert(0, "该参数需要整数: "); return -1; }
+        return 1 + intWidth(num);
     }
 
     private static int intWidth(long v) {
@@ -626,6 +709,10 @@ public final class TypedCompiler {
 
     private static long parseNum(String tok, StringBuilder err) {
         try {
+            switch (tok.toLowerCase(Locale.ROOT)) {
+                case "false": case "no": case "off": return 0;
+                case "true": case "yes": case "on": return 1;
+            }
             if (tok.startsWith("0x") || tok.startsWith("0X")) return Long.parseLong(tok.substring(2), 16);
             return Long.parseLong(tok);
         } catch (NumberFormatException e) {
@@ -667,6 +754,8 @@ public final class TypedCompiler {
             case TypedDecoder.T_VAR: {
                 String v = tok.substring(1);
                 int idx = resolveGlobal(v, globalsByName, err);
+                if (err.length() > 0) return;
+                if (idx < 0 || idx > 16381) { err.append("全局变量 $" + v + " 超出可用范围 (0-16381)"); return; }
                 write16(out, idx * 4);
                 break;
             }
@@ -702,6 +791,10 @@ public final class TypedCompiler {
                 if (s.startsWith("'") && s.endsWith("'") && s.length() >= 2) {
                     s = s.substring(1, s.length() - 1);
                 }
+                if (s.length() > 8) {
+                    err.append("字符串超长（最多 8 字符，实际 " + s.length() + "）: " + tok);
+                    return;
+                }
                 for (int i = 0; i < 8; i++) {
                     if (i < s.length()) out.write(s.charAt(i) & 0xFF); else out.write(0);
                 }
@@ -720,11 +813,13 @@ public final class TypedCompiler {
         return -(11 + tgt);
     }
 
-    /** 数组参数 token 解析：0@(1@)、0@(5)、$X(0@)、$123(0@) → {V|L, base, idx} 或 null */
+    /** 数组参数 token 解析：0@(1@)、0@(5)、$X(0@)、$123(0@)（兼容方括号 0@[1]）→ {V|L, base, idx} 或 null */
     private static String[] arrayOf(String tok) {
         if (tok == null) return null;
         int p = tok.indexOf('(');
-        if (p <= 0 || !tok.endsWith(")")) return null;
+        char close = ')';
+        if (p <= 0) { p = tok.indexOf('['); close = ']'; }
+        if (p <= 0 || !tok.endsWith(String.valueOf(close))) return null;
         String base = tok.substring(0, p);
         String idx = tok.substring(p + 1, tok.length() - 1);
         if (idx.isEmpty() || idx.indexOf('(') >= 0 || idx.indexOf(')') >= 0 || idx.indexOf(' ') >= 0) return null;
@@ -741,6 +836,9 @@ public final class TypedCompiler {
         if (arrTok != null) return arrTok[0].equals("V") ? TypedDecoder.T_VAR_ARRAY : TypedDecoder.T_LVAR_ARRAY;
         if (tok.startsWith("$")) return TypedDecoder.T_VAR;
         if (tok.endsWith("@")) return TypedDecoder.T_LVAR;
+        String lowT = tok.toLowerCase(Locale.ROOT);
+        if (lowT.equals("false") || lowT.equals("no") || lowT.equals("off")
+                || lowT.equals("true") || lowT.equals("yes") || lowT.equals("on")) return TypedDecoder.T_INT8; // 布尔 → 0/1
         if (tok.contains(".") || tok.contains("e") || tok.contains("E")) return TypedDecoder.T_FLOAT32;
         long v = parseNum(tok, new StringBuilder());
         if (ph.type == 'm' || ph.type == 'o') return TypedDecoder.T_INT32;

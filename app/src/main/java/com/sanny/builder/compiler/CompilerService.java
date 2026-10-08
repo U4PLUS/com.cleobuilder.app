@@ -108,6 +108,8 @@ public class CompilerService {
      * 使用 TypedCompiler（基于官方 opcode 模板 + 类型/条件表，字节级兼容）。
      */
     public byte[] compileToCs(String text, StringBuilder err) {
+        if (text != null && text.startsWith("\uFEFF")) text = text.substring(1); // 容错 UTF-8 BOM
+        if (text == null || text.trim().isEmpty()) { err.append("输入为空：没有可编译的内容"); return null; }
         byte[] code = TypedCompiler.compile(text, table, globalsByName, err);
         if (code == null) return null;
         return CsFormat.pack(code);
@@ -115,6 +117,8 @@ public class CompilerService {
 
     /** 只编译主代码段（不带任何文件头），供 .csi 容器打包 */
     public byte[] compileMain(String text, StringBuilder err) {
+        if (text != null && text.startsWith("\uFEFF")) text = text.substring(1);
+        if (text == null || text.trim().isEmpty()) { err.append("输入为空：没有可编译的内容"); return null; }
         return TypedCompiler.compile(text, table, globalsByName, err);
     }
 
