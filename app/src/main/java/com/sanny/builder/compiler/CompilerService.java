@@ -32,6 +32,12 @@ public class CompilerService {
     private GameMode mode = GameMode.GTASA;
     private String dataDir; // filesDir/sanny/data
     private String lastDataWarn = ""; // 最近一次表加载校验摘要
+    private final java.util.List<String> lastLoaded = new java.util.ArrayList<>(); // 最近实际加载的表
+    private File lastIniDir; // 最近表来源目录（供 UI 显示路径）
+
+    /** 最近一次 init 实际加载的表文件名（按加载顺序） */
+    public java.util.List<String> lastLoadedTables() { return new java.util.ArrayList<>(lastLoaded); }
+    public String lastIniDirPath() { return lastIniDir == null ? "" : lastIniDir.getAbsolutePath(); }
 
     /** 兼容旧调用：只从内置数据目录加载 */
     public void init(GameMode m, String dataRoot) {
@@ -62,6 +68,8 @@ public class CompilerService {
             if (ini != null && ini.length > 0) dir = d;
         }
         if (dir == null) dir = new File(dataRoot, m.dataDir);
+        lastIniDir = dir;
+        lastLoaded.clear();
 
         // 加载队列：内置表按 iniFiles 顺序（被启用者），自定义表（非内置名）按字母序最后加载
         java.util.List<String> loadOrder = new java.util.ArrayList<>();
@@ -85,6 +93,7 @@ public class CompilerService {
             if (f.isFile()) {
                 try {
                     int bad = table.load(new String(readAll(f), StandardCharsets.UTF_8), w);
+                    lastLoaded.add(ini);
                     if (bad > 0) w.append("「").append(ini).append("」跳过 ").append(bad).append(" 行非法定义; ");
                 } catch (Exception ignored) { }
             }

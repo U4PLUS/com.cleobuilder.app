@@ -245,26 +245,7 @@ class MainActivity : AppCompatActivity() {
         completionPopup = popup
     }
 
-    /** 编译失败时把错误行标红 */
-    private fun applyErrorDiagnostics(errText: String, source: String) {
-        val m = Regex("第 (\\d+) 行").find(errText) ?: return
-        val lineNo = m.groupValues[1].toIntOrNull() ?: return
-        val count = source.lines().size
-        val lines = Regex("第 (\\d+) 行").findAll(errText)
-            .mapNotNull { it.groupValues[1].toIntOrNull() }
-            .filter { it in 1..count }
-            .map { it - 1 }
-            .toSet()
-        editor.setErrorLines(lines)
-        // 自动跳到第一个错误行，方便就地修改
-        val first = lines.minOrNull()
-        if (first != null) editor.goToLine(first)
-        appendLog("已标红 ${lines.size} 个错误行，定位到第 ${first?.plus(1)} 行")
-    }
-
-    // ---------- 菜单 ----------
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         // 动态填充全部游戏模式
         val modeSub = menu.findItem(R.id.action_mode)?.subMenu
@@ -287,7 +268,7 @@ class MainActivity : AppCompatActivity() {
             item.itemId == R.id.action_open -> { openBuiltin(); true }
             item.itemId == R.id.action_save -> { saveSource(); true }
             item.itemId == R.id.action_new -> { newFileDialog(); true }
-            item.itemId == R.id.action_opcode -> { showOpcodeTablesDialog(); true }
+            item.itemId == R.id.action_opcode -> { startActivity(Intent(this, com.sanny.builder.ui.OpcodeManagerActivity::class.java).putExtra("mode", currentMode.name)); true }
             item.itemId == R.id.action_output -> { showOutputDialog(); true }
             item.itemId == R.id.action_about -> { showAboutDialog(); true }
             item.itemId == R.id.action_wrap -> {
@@ -354,69 +335,6 @@ class MainActivity : AppCompatActivity() {
         val saved = prefs.getString(enabledPrefKey(mode), null) ?: return null
         return saved.split("|").filter { it.isNotBlank() }
     }
-
-    private fun saveEnabledOpcodeTables(mode: GameMode, list: List<String>) {
-        prefs.edit().putString(enabledPrefKey(mode), list.joinToString("|")).apply()
-    }
-
-    private fun isTableEnabled(mode: GameMode, name: String): Boolean {
-        val saved = prefs.getString(enabledPrefKey(mode), null) ?: return true // 默认全部启用
-        return saved.split("|").contains(name)
-    }
-
-    private fun showOpcodeTablesDialog() {
-        val mode = currentMode
-        val dir = File(opcodeDir, mode.dataDir)
-        val ini = dir.listFiles { f -> f.isFile && f.name.endsWith(".ini") }
-        if (ini.isNullOrEmpty()) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Opcode 表管理（${mode.label}）")
-                .setMessage("opcode 数据尚未解压到\n${dir.absolutePath}\n\n点「重置」把内置表解压到该目录，之后可浏览/勾选/自定义。")
-                .setPositiveButton("重置") { _, _ -> resetOpcodeData() }
-                .setNegativeButton("取消", null)
-                .show()
-            return
-        }
-        val names = ini.sortedBy { it.name }.map { it.name }.toTypedArray()
-        val checked = BooleanArray(names.size) { i -> isTableEnabled(mode, names[i]) }
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Opcode 表管理（${mode.label}）")
-            .setMessage("目录：${dir.absolutePath}\n\n勾选要启用的表；自定义 .ini 放进来即出现。加载顺序：内置按依赖、自定义最后（可覆盖）。")
-            .setMultiChoiceItems(names, checked) { _, i, isChecked -> checked[i] = isChecked }
-            .setPositiveButton("确定") { _, _ ->
-                val enabled = names.filterIndexed { i, _ -> checked[i] }
-                if (enabled.isEmpty()) {
-                    prefs.edit().remove(enabledPrefKey(mode)).apply()
-                    appendLog("未启用任何表 → 使用全部内置表")
-                } else {
-                    saveEnabledOpcodeTables(mode, enabled)
-                    appendLog("已启用 ${enabled.size} 张表：${enabled.joinToString(", ")}")
-                }
-                initCompiler(mode)
-                appendLog("模式: ${mode.label}  (opcode 表 ${compiler.opcodeCount()} 条)")
-            }
-            .setNegativeButton("重置数据") { _, _ ->
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("重置 opcode 数据")
-                    .setMessage("重新从内置资源解压 opcode 表到\n${dir.absolutePath}\n\n同名内置表将被覆盖，你自定义的表会保留。")
-                    .setPositiveButton("重置") { _, _ -> resetOpcodeData() }
-                    .setNegativeButton("取消", null)
-                    .show()
-            }
-            .setNeutralButton("取消", null)
-            .show()
-    }
-
-    private fun resetOpcodeData() {
-        runCatching {
-            val n = AssetsHelper.extractOpcodeTables(this, opcodeDir)
-            appendLog("opcode 表已重置：解压 $n 个表文件到 ${opcodeDir.absolutePath}")
-            initCompiler(currentMode)
-            appendLog("模式: ${currentMode.label}  (opcode 表 ${compiler.opcodeCount()} 条)")
-        }.onFailure { e -> appendLog("重置失败: ${e.message}（请授予存储权限后重试）") }
-    }
-
-    // ---------- 文件 ----------
 
     private fun updateTitle() {
         supportActionBar?.title = currentFile?.name ?: "CLEO Builder"
@@ -535,7 +453,6 @@ class MainActivity : AppCompatActivity() {
         }
         if (bytes == null || err.isNotEmpty()) {
             appendLog("编译失败:\n$err")
-            applyErrorDiagnostics(err.toString(), text)
             return
         }
 

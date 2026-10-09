@@ -106,8 +106,7 @@ public final class TypedCompiler {
                 String label = lm.group(1);
                 if (labelOffsets.containsKey(label)) {
                     err.append("重复标签: :").append(label).append("（此前已定义）");
-                    err.insert(0, "第 " + lineNo + " 行: ");
-                    return null;
+                                        return null;
                 }
                 labelOffsets.put(label, pos);
                 labels.put(pos, label);
@@ -115,7 +114,7 @@ public final class TypedCompiler {
             }
             String low = line.toLowerCase(Locale.ROOT);
             if (low.equals("then")) {
-                if (st.isEmpty() || st.peek().kind != Frame.K_IF) { err.insert(0, "第 " + lineNo + " 行: "); err.append("then 出现在 if 之外"); return null; }
+                if (st.isEmpty() || st.peek().kind != Frame.K_IF) { err.append("then 出现在 if 之外"); return null; }
                 Frame f = st.peek();
                 f.condOpen = false;
                 PendingLine j = new PendingLine();
@@ -126,7 +125,7 @@ public final class TypedCompiler {
                 continue;
             }
             if (low.equals("else")) {
-                if (st.isEmpty() || st.peek().kind != Frame.K_IF) { err.insert(0, "第 " + lineNo + " 行: "); err.append("else 出现在 if 之外"); return null; }
+                if (st.isEmpty() || st.peek().kind != Frame.K_IF) { err.append("else 出现在 if 之外"); return null; }
                 Frame f = st.peek();
                 if (f.jumpPending != null) f.jumpPending.jumpTarget = pos + 7;
                 PendingLine j = new PendingLine();
@@ -162,7 +161,7 @@ public final class TypedCompiler {
             int start = pos;
             PosIO pio = new PosIO();
             parseAndMeasure(line, table, globalsByName, err, pio);
-            if (err.length() > 0) { err.insert(0, "第 " + lineNo + " 行: "); return null; }
+            if (err.length() > 0) { return null; }
             if (pio.isIfHead) {
                 // if/while 头行：先闭合当前收集期，再压栈
                 if (!st.isEmpty() && st.peek().condOpen) pos += closeCond(st.peek(), pos, lines);
@@ -176,7 +175,7 @@ public final class TypedCompiler {
                 if (table.isCondition(pio.def.id)) {
                     // 条件行：编译进栈顶 if 头
                     byte[] cb = compileLine(line, table, globalsByName, err);
-                    if (err.length() > 0) { err.insert(0, "第 " + lineNo + " 行: "); return null; }
+                    if (err.length() > 0) { return null; }
                     PendingLine hl = st.peek().headLine;
                     if (hl.condBytes == null) hl.condBytes = new java.io.ByteArrayOutputStream();
                     hl.condBytes.write(cb, 0, cb.length);

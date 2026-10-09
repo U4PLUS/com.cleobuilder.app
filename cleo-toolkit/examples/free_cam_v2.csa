@@ -1,0 +1,58 @@
+{$CLEO .csa}
+// 车辆自由视角 v2 - 触摸触发 + 5 秒延迟回正（CLEO-ANDROID 官方 opcode）
+// 触发：右半屏触摸（九宫格点 7/8/9 = 相机操控区）按住 → 自由视角
+// 保持：每帧相机挂车带偏移（覆盖游戏自动回正）
+// 回正：松开触摸 300 帧（约 5 秒）后 set_camera_directly_behind_player
+
+0000:
+0006: 4@ = 0     // 帧计数
+0006: 5@ = 0     // 自由视角开关
+0006: 6@ = 0     // 玩家车 handle
+0007: 0@ = 0.0   // 相机 X 偏移
+0007: 1@ = 0.0   // 相机 Y 偏移（固定 1.5 米）
+wait 1000
+
+:MAIN
+wait 0
+if
+00DF: actor $PLAYER_ACTOR driving
+then
+    03C0: 6@ = actor $PLAYER_ACTOR car
+
+    // 九宫格触摸检测：点 7/8/9（右半屏）任一按住 = 操控中
+    0DE0: 7@ = get_touch_point_state 7 mintime 30
+    0DE0: 8@ = get_touch_point_state 8 mintime 30
+    0DE0: 9@ = get_touch_point_state 9 mintime 30
+    if or
+    0027: 7@ > 0
+    0027: 8@ > 0
+    0027: 9@ > 0
+    then
+        0006: 5@ = 1
+        0006: 4@ = 0
+    end
+
+    // 自由视角中：帧计数，超过 300 帧回正
+    if
+    0027: 5@ > 0
+    then
+        0008: 4@ += 1
+        if
+        001E: 4@ > 300
+        then
+            0006: 5@ = 0
+            0373: set_camera_directly_behind_player
+        end
+    end
+else
+    0006: 5@ = 0
+    0006: 4@ = 0
+end
+
+// 自由视角保持：相机挂车带偏移（防止游戏回正）
+if
+001E: 5@ > 0
+then
+    0679: put_camera_on_car 6@ with_offset 0@ 1.0 0.0 rotation 0.0 0.0 0.0 tilt 0.0 switchstyle 0
+end
+0002: jump @MAIN

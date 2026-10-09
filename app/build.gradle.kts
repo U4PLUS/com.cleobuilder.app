@@ -11,8 +11,8 @@ android {
         applicationId = "com.sanny.builder"
         minSdk = 21 // 支持 Android 5+
         targetSdk = 29
-        versionCode = 3
-        versionName = "1.0.3"
+        versionCode = 4
+        versionName = "1.0.4"
         // 只需 armv7 (armeabi-v7a) + arm64；剔除 x86/mips 与 JNA 其余 ABI so
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a")
