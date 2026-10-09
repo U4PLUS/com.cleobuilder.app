@@ -31,19 +31,61 @@ public class CompilerService {
 
     private GameMode mode = GameMode.GTASA;
     private String dataDir; // filesDir/sanny/data
+    private String lastDataWarn = ""; // 最近一次表加载校验摘要
 
+    /** 兼容旧调用：只从内置数据目录加载 */
     public void init(GameMode m, String dataRoot) {
+        init(m, dataRoot, null, null, null);
+    }
+
+    /**
+     * 加载当前模式的 opcode 表。
+     * @param dataRoot   内置数据目录（filesDir/sanny/data，兜底）
+     * @param opcodeRoot 用户表目录（cleo/CLEO_Builder/opcode/；存在 .ini 时优先）
+     * @param enabled    启用的表文件名列表（null/空 = 全部内置表）；自定义表最后加载（覆盖优先级最高）
+     * @param warn       非空时写入合并校验报告
+     */
+    public void init(GameMode m, String dataRoot, File opcodeRoot, java.util.List<String> enabled, StringBuilder warn) {
         this.mode = m;
         this.dataDir = dataRoot;
         table.clear();
         globalsByName.clear();
         globalsById.clear();
-        File dir = new File(dataRoot, m.dataDir);
-        for (String ini : m.iniFiles) {
+        lastDataWarn = "";
+        StringBuilder w = new StringBuilder();
+
+        // 表来源目录：用户表目录优先（存在 .ini 时），否则内置
+        File dir = null;
+        if (opcodeRoot != null) {
+            File d = new File(opcodeRoot, m.dataDir);
+            File[] ini = d == null ? null : d.listFiles((x, s) -> s.endsWith(".ini"));
+            if (ini != null && ini.length > 0) dir = d;
+        }
+        if (dir == null) dir = new File(dataRoot, m.dataDir);
+
+        // 加载队列：内置表按 iniFiles 顺序（被启用者），自定义表（非内置名）按字母序最后加载
+        java.util.List<String> loadOrder = new java.util.ArrayList<>();
+        if (enabled != null && !enabled.isEmpty()) {
+            for (String ini : m.iniFiles) {
+                if (enabled.contains(ini) && new File(dir, ini).isFile()) loadOrder.add(ini);
+            }
+            java.util.List<String> custom = new java.util.ArrayList<>();
+            for (String ini : enabled) {
+                if (!m.iniFiles.contains(ini) && new File(dir, ini).isFile()) custom.add(ini);
+            }
+            java.util.Collections.sort(custom);
+            loadOrder.addAll(custom);
+        } else {
+            for (String ini : m.iniFiles) {
+                if (new File(dir, ini).isFile()) loadOrder.add(ini);
+            }
+        }
+        for (String ini : loadOrder) {
             File f = new File(dir, ini);
             if (f.isFile()) {
                 try {
-                    table.load(new String(readAll(f), StandardCharsets.UTF_8));
+                    int bad = table.load(new String(readAll(f), StandardCharsets.UTF_8), w);
+                    if (bad > 0) w.append("「").append(ini).append("」跳过 ").append(bad).append(" 行非法定义; ");
                 } catch (Exception ignored) { }
             }
         }
@@ -84,7 +126,11 @@ public class CompilerService {
                 }
             } catch (Exception ignored) { }
         }
+        if (warn != null && w.length() > 0) warn.append(w);
+        lastDataWarn = w.toString();
     }
+
+    public String lastDataWarn() { return lastDataWarn; }
 
     public GameMode mode() { return mode; }
     public int opcodeCount() { return table.size(); }

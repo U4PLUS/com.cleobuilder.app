@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.sanny.builder.compiler.CompilerService
 import com.sanny.builder.compiler.GameMode
+import com.sanny.builder.core.AssetsHelper
 import com.sanny.builder.core.SannyService
 import com.sanny.builder.ui.FilePicker
 import com.sanny.builder.ui.CleoEditor
@@ -53,6 +54,10 @@ class MainActivity : AppCompatActivity() {
     private val prefs by lazy { getSharedPreferences("cleo_builder", MODE_PRIVATE) }
     private val cleoBuilderDir: File
         get() = File(File(Environment.getExternalStorageDirectory(), "cleo"), "CLEO_Builder")
+
+    /** 用户 opcode 表目录：cleo/CLEO_Builder/opcode/{sa|sa_mobile}/ （可浏览/勾选/自定义） */
+    private val opcodeDir: File
+        get() = File(cleoBuilderDir, "opcode")
 
     /** 底部标点栏符号 */
     private val SYMBOLS = arrayOf(
@@ -93,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             if (lastMode != null) {
                 switchMode(lastMode, quiet = true)
             } else {
-                compiler.init(GameMode.GTASA, dataRoot)
+                initCompiler(GameMode.GTASA)
                 currentMode = GameMode.GTASA
             }
 
@@ -282,6 +287,7 @@ class MainActivity : AppCompatActivity() {
             item.itemId == R.id.action_open -> { openBuiltin(); true }
             item.itemId == R.id.action_save -> { saveSource(); true }
             item.itemId == R.id.action_new -> { newFileDialog(); true }
+            item.itemId == R.id.action_opcode -> { showOpcodeTablesDialog(); true }
             item.itemId == R.id.action_output -> { showOutputDialog(); true }
             item.itemId == R.id.action_about -> { showAboutDialog(); true }
             item.itemId == R.id.action_wrap -> {
@@ -325,11 +331,89 @@ class MainActivity : AppCompatActivity() {
         currentMode = mode
         sanny.switchMode(mode)
         warmLanguageService()
-        compiler.init(mode, dataRoot)
+        initCompiler(mode)
         prefs.edit().putString("last_mode", mode.name).apply()
         updateTitle()
         if (!quiet) appendLog("模式: ${mode.label}  (opcode 表 ${compiler.opcodeCount()} 条)")
         invalidateOptionsMenu()
+    }
+
+    // ---------- Opcode 表管理 ----------
+
+    /** 统一编译初始化：外部用户表目录 + 启用列表 + 校验报告 */
+    private fun initCompiler(mode: GameMode) {
+        val warn = StringBuilder()
+        compiler.init(mode, dataRoot, opcodeDir, enabledOpcodeTables(mode), warn)
+        if (warn.isNotEmpty()) appendLog("opcode 表校验: $warn")
+    }
+
+    private fun enabledPrefKey(mode: GameMode) = "opcode_enabled_${mode.dataDir}"
+
+    /** 已启用表列表；null = 未自定义（全部内置表） */
+    private fun enabledOpcodeTables(mode: GameMode): List<String>? {
+        val saved = prefs.getString(enabledPrefKey(mode), null) ?: return null
+        return saved.split("|").filter { it.isNotBlank() }
+    }
+
+    private fun saveEnabledOpcodeTables(mode: GameMode, list: List<String>) {
+        prefs.edit().putString(enabledPrefKey(mode), list.joinToString("|")).apply()
+    }
+
+    private fun isTableEnabled(mode: GameMode, name: String): Boolean {
+        val saved = prefs.getString(enabledPrefKey(mode), null) ?: return true // 默认全部启用
+        return saved.split("|").contains(name)
+    }
+
+    private fun showOpcodeTablesDialog() {
+        val mode = currentMode
+        val dir = File(opcodeDir, mode.dataDir)
+        val ini = dir.listFiles { f -> f.isFile && f.name.endsWith(".ini") }
+        if (ini.isNullOrEmpty()) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Opcode 表管理（${mode.label}）")
+                .setMessage("opcode 数据尚未解压到\n${dir.absolutePath}\n\n点「重置」把内置表解压到该目录，之后可浏览/勾选/自定义。")
+                .setPositiveButton("重置") { _, _ -> resetOpcodeData() }
+                .setNegativeButton("取消", null)
+                .show()
+            return
+        }
+        val names = ini.sortedBy { it.name }.map { it.name }.toTypedArray()
+        val checked = BooleanArray(names.size) { i -> isTableEnabled(mode, names[i]) }
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Opcode 表管理（${mode.label}）")
+            .setMessage("目录：${dir.absolutePath}\n\n勾选要启用的表；自定义 .ini 放进来即出现。加载顺序：内置按依赖、自定义最后（可覆盖）。")
+            .setMultiChoiceItems(names, checked) { _, i, isChecked -> checked[i] = isChecked }
+            .setPositiveButton("确定") { _, _ ->
+                val enabled = names.filterIndexed { i, _ -> checked[i] }
+                if (enabled.isEmpty()) {
+                    prefs.edit().remove(enabledPrefKey(mode)).apply()
+                    appendLog("未启用任何表 → 使用全部内置表")
+                } else {
+                    saveEnabledOpcodeTables(mode, enabled)
+                    appendLog("已启用 ${enabled.size} 张表：${enabled.joinToString(", ")}")
+                }
+                initCompiler(mode)
+                appendLog("模式: ${mode.label}  (opcode 表 ${compiler.opcodeCount()} 条)")
+            }
+            .setNegativeButton("重置数据") { _, _ ->
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("重置 opcode 数据")
+                    .setMessage("重新从内置资源解压 opcode 表到\n${dir.absolutePath}\n\n同名内置表将被覆盖，你自定义的表会保留。")
+                    .setPositiveButton("重置") { _, _ -> resetOpcodeData() }
+                    .setNegativeButton("取消", null)
+                    .show()
+            }
+            .setNeutralButton("取消", null)
+            .show()
+    }
+
+    private fun resetOpcodeData() {
+        runCatching {
+            val n = AssetsHelper.extractOpcodeTables(this, opcodeDir)
+            appendLog("opcode 表已重置：解压 $n 个表文件到 ${opcodeDir.absolutePath}")
+            initCompiler(currentMode)
+            appendLog("模式: ${currentMode.label}  (opcode 表 ${compiler.opcodeCount()} 条)")
+        }.onFailure { e -> appendLog("重置失败: ${e.message}（请授予存储权限后重试）") }
     }
 
     // ---------- 文件 ----------

@@ -43,6 +43,11 @@
         android:checkable="true"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_opcode"
+        android:title="Opcode 表管理"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_output"
         android:title="\u8f93\u51fa\u65e5\u5fd7"
         app:showAsAction="never" />

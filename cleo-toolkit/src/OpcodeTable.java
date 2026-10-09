@@ -99,7 +99,15 @@ public class OpcodeTable {
 
     public void clear() { byId.clear(); byNameLower.clear(); }
 
-    public void load(String iniContent) {
+    public int load(String iniContent) { return load(iniContent, null); }
+
+    /**
+     * 加载一张 opcode 表。重复 opcode id 后加载覆盖先加载（多表合并语义）。
+     * 返回跳过的非法行数；warn 非空时写入校验摘要。
+     */
+    public int load(String iniContent, StringBuilder warn) {
+        int bad = 0;
+        int total = 0;
         String section = "";
         for (String raw : iniContent.split("\n")) {
             String line = raw.trim();
@@ -110,31 +118,37 @@ public class OpcodeTable {
             }
             // HEX=count,name
             int eq = line.indexOf('=');
-            if (eq < 0) continue;
+            if (eq < 0) { bad++; continue; }
             String hexPart = line.substring(0, eq).trim();
             String rest = line.substring(eq + 1).trim();
             int comma = rest.indexOf(',');
-            if (comma < 0) continue;
+            if (comma < 0) { bad++; continue; }
             int id;
             try {
                 id = Integer.parseInt(hexPart, 16);
             } catch (NumberFormatException e) {
-                continue; // 非十六进制键（DATE= 等）
+                bad++; continue; // 非十六进制键（DATE= 等）
             }
             int count;
             try {
                 count = Integer.parseInt(rest.substring(0, comma).trim());
             } catch (NumberFormatException e) {
-                continue;
+                bad++; continue;
             }
             String format = rest.substring(comma + 1).trim();
             // 去掉格式末尾的注释（; 后）
             int semi = format.indexOf(';');
             if (semi >= 0) format = format.substring(0, semi);
+            if (format.isEmpty()) { bad++; continue; }
             OpcodeDef def = new OpcodeDef(id, count, format);
             byId.put(id, def);
             byNameLower.put(def.name.toLowerCase(), id);
+            total++;
         }
+        if (warn != null && bad > 0) {
+            warn.append("表内 ").append(bad).append(" 行格式非法已跳过（共 ").append(total).append(" 条有效定义）");
+        }
+        return bad;
     }
 
     public int size() { return byId.size(); }
